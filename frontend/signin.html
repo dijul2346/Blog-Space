@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+<style>
+     body, html {
+    height: 100%;
+    margin: 0;
+    background-color: bisque;
+    }
+    .ip{
+        height: 15px;
+        width: 150px;
+        padding:0px;
+        margin: 0px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .box{
+        background-color: #fff8ee;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        width: 350px;
+        font-family: 'Segoe UI', sans-serif;
+        justify-content: center;
+        justify-self: center;
+    }
+    button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #ff7f50;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    }
+</style>
+<body>
+    <div style="height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <div class="box">
+        <div style="display: flex;justify-content: center;align-items: center;gap: 20px;padding: 20px;">
+            <h4>Username :</h4>
+            <input placeholder="Username" id="uname" class="ip">
+        </div>
+        <div style="display: flex;justify-content: center;gap: 20px;align-items: center;">
+            <h4>Password :</h4>
+            <input placeholder="Password" id="pw" class="ip">
+        </div>
+        <div style="display: flex;justify-content: center;padding: 20px;">
+        <button onclick="Signin()" id="signin">Signin</button>
+        </div>
+        <p onclick=back() style="justify-self:flex-end">Signup</p>
+    </div>
+    </div>
+    <script>
+        function back(){
+            window.location="signup.html"
+        }
+        function Signin(){
+            const userName=document.getElementById("uname").value
+            const password=document.getElementById("pw").value
+
+            axios.post("http://localhost:3000/signin",{
+                userName:userName,
+                password:password
+            }).then(function(response){
+                const token=response.data.token;
+                if(token){
+                    localStorage.setItem("authToken",token);
+                    window.location="home.html"
+                }
+            })
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<style>
+    .blog{
+        border-radius: 10px;
+        border:2px solid rgb(237, 232, 232);
+        background-color: rgb(255, 255, 255);
+        padding: 10px;
+        margin:1px;
+        min-width:100%;
+        min-height: 50vh;
+    }
+    button {
+    background-color: #007BFF; /* Blue */
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    margin-left: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    }
+</style>
+<body>
+        <div style="display: flex; justify-content:space-between; align-items: center;
+        background-color: #f8f8f8;padding-left:180px;padding-right:25px; 
+        font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);position: fixed; top: 0; left: 0; right: 0; z-index: 999;margin-bottom: 10%;">
+        <div onclick="window.location.href='home.html'" ><h2>Blog.com</h2></div>
+        <div style="display: flex; gap: 30px; font-size: 16px;padding:10px;justify-content: end;">
+            <div><Button onclick="window.location.href='createBlog.html'">Create Blog</Button></div>
+            <div><button onclick=logOut()>Log Out</button></div>
+        </div>
+        </div>
+        <div style="margin-top: 100px;width:80%;justify-self:center;">
+            <div id="container">
+
+            </div>
+        </div>
+
+        <script>
+            
+        function display(blog){
+            const newDiv=document.createElement('div')
+            newDiv.id=blog.blogId
+            newDiv.className="blog"
+            const user=document.createElement('a')
+            user.id=blog.userId
+            user.href=`profile.html?userId=${blog.userId}`
+            const main=document.createElement('h3')
+            main.textContent=blog.title
+            const cont=document.createElement('p')
+            cont.textContent=blog.content
+            newDiv.appendChild(main)
+            newDiv.appendChild(user)
+            newDiv.appendChild(cont)
+            const container=document.getElementById("container")
+            container.appendChild(newDiv)
+        }
+
+        function loadBlog(){
+            const params = new URLSearchParams(window.location.search);
+            const blogId = params.get("blogId");
+            const userId = params.get("userId");
+            
+            axios.get(`http://localhost:3000/blogs/${userId}/${blogId}`)
+            .then(function(response){
+                blog=response.data
+                console.log(blog[0])
+                display(blog[0])
+
+            })
+            
+        }
+        window.onload=loadBlog;
+        </script>
+    
+</body>
+</html>

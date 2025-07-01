@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<style>
+    button {
+    background-color: #007BFF; /* Blue */
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    margin-left: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    }
+</style>
+
+<body>
+    <div style="display: flex; justify-content:space-between; align-items: center;
+        background-color: #f8f8f8;padding-left:180px;padding-right:25px; 
+        font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);position: fixed; top: 0; left: 0; right: 0; z-index: 999;margin-bottom: 10%;">
+        <div onclick="window.location.href='home.html'" ><h2>Blog.com</h2></div>
+        <div style="display: flex; gap: 30px; font-size: 16px;padding:10px;justify-content: end;">
+            <div><Button onclick="window.location.href='createBlog.html'">Create Blog</Button></div>
+            <div><button onclick=logOut()>Log Out</button></div>
+        </div>
+    </div>
+    <div style="padding-top: 80px;width:60%;justify-content: center;justify-self:center;">
+        <h3>Title</h3>
+        <textarea placeholder="New Blog"id="title"
+        style="padding: 2px;height: 25px;margin-top:1px;width: 90vb;"></textarea>
+    </div>
+    <div style="width:60%;justify-content: center;justify-self:center;">
+        <textarea type="text" id="content" placeholder="Enter something"
+        style="height: 20vh;overflow:scroll;width: 90vb;"></textarea>
+        <br>
+        <button onclick=newBlog()>Submit</button>
+    </div>
+    <script>
+        function newBlog(){
+            const title=document.getElementById("title").value;
+            const content=document.getElementById("content").value;
+            const token=localStorage.getItem("authToken")
+            axios.post("http://localhost:3000/create-blogs",{
+                title:title,
+                content:content
+            },{headers:{token:token}}
+        ).then(function(response){
+            const{userId,blogId}=response.data
+            window.location.href = `view.html?userId=${userId}&blogId=${blogId}`;
+        })
+        }
+    </script>
+</body>
