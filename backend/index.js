@@ -7,6 +7,19 @@ app.use(cors());
 const { randomInt } = require("crypto")
 
 
+
+const mongoose=require('mongoose')
+mongoose.connect("mongodb+srv://dijulM:DM%40ncr70@cluster0.fezmq8v.mongodb.net/Blog-app-db");
+console.log(mongoose.connection.readyState)
+const UserSchema=({
+    name:String,
+    userName:String,
+    password:String,
+})
+const UserModel=mongoose.model('users',UserSchema)
+
+
+
 let userid=1000
 let users=[]
 let blogs=[]
@@ -38,21 +51,41 @@ app.post("/signup", function(req, res) {
     const userName = req.body.userName;
     const password = req.body.password;
 
-    if (users.some(u => u.userName === userName)) {
-        return res.send("Username exists");
-    }
-    fs.readFile("users.json", "utf-8", function(err, data) {
-        const gotData = JSON.parse(data);
-        users= gotData.users || [];
-        const userId = userid++;
-        const newUser = { userId, name, userName, password };
-        gotData.users.push(newUser);
-        users.push(newUser);
+    UserModel.findOne({
+        userName:userName
+    }).then(function(user){
+        if(user){
+            return res.send("Username exists");
+        }
+        else{
+            UserModel.create({
+                name:name,
+                userName:userName,
+                password:password,
+            }).then(
+                res.send("Success")
+            )
 
-        fs.writeFile("users.json", JSON.stringify(gotData), "utf-8", function(err) {
-            res.send("Success");
-        });
-    });
+        }
+    })
+
+
+
+    // if (users.some(u => u.userName === userName)) {
+    //     return res.send("Username exists");
+    // }
+    // fs.readFile("users.json", "utf-8", function(err, data) {
+    //     const gotData = JSON.parse(data);
+    //     users= gotData.users || [];
+    //     const userId = userid++;
+    //     const newUser = { userId, name, userName, password };
+    //     gotData.users.push(newUser);
+    //     users.push(newUser);
+
+    //     fs.writeFile("users.json", JSON.stringify(gotData), "utf-8", function(err) {
+    //         res.send("Success");
+    //     });
+    // });
     
 });
 
@@ -60,20 +93,32 @@ app.post("/signup", function(req, res) {
 app.post("/signin", function(req, res) {
     const userName = req.body.userName;
     const password = parseInt(req.body.password);
-    fs.readFile("users.json", "utf-8", function(err, data) {
-        const gotData = JSON.parse(data);
-        users=gotData.users; 
-        console.log(users[0])
-        const user = users.find(u => u.userName === userName && u.password === password);
-        
-        if (user) {
+    UserModel.findOne({
+        userName:userName,
+        password:password
+    }).then(function(user){
+        if(user){
             const token = jwt.sign({ userId: user.userId, userName: user.userName }, "123random");
             res.send({ token: token });
-        } else {
+        }else {
             res.send("invalid");
             console.log("invalid");
         }
-    });
+    })
+    // fs.readFile("users.json", "utf-8", function(err, data) {
+    //     const gotData = JSON.parse(data);
+    //     users=gotData.users; 
+    //     console.log(users[0])
+    //     const user = users.find(u => u.userName === userName && u.password === password);
+        
+    //     if (user) {
+    //         const token = jwt.sign({ userId: user.userId, userName: user.userName }, "123random");
+    //         res.send({ token: token });
+    //     } else {
+    //         res.send("invalid");
+    //         console.log("invalid");
+    //     }
+    // });
 });
 
 app.post("/create-blogs",function(req,res){
