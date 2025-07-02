@@ -18,6 +18,13 @@ const UserSchema=({
 })
 const UserModel=mongoose.model('users',UserSchema)
 
+const BlogSchema=({
+    userid:String,
+    userName:String,
+    title:String,
+    content:String,
+})
+const Blogs=mongoose.model('users',BlogSchema)
 
 
 let userid=1000
@@ -27,6 +34,7 @@ let blogId=0
 let todoId=0;
 
 const fs = require('fs');
+const { title } = require("process");
 
 function auth(req,res,next){
     const token=req.token
@@ -67,26 +75,7 @@ app.post("/signup", function(req, res) {
             )
 
         }
-    })
-
-
-
-    // if (users.some(u => u.userName === userName)) {
-    //     return res.send("Username exists");
-    // }
-    // fs.readFile("users.json", "utf-8", function(err, data) {
-    //     const gotData = JSON.parse(data);
-    //     users= gotData.users || [];
-    //     const userId = userid++;
-    //     const newUser = { userId, name, userName, password };
-    //     gotData.users.push(newUser);
-    //     users.push(newUser);
-
-    //     fs.writeFile("users.json", JSON.stringify(gotData), "utf-8", function(err) {
-    //         res.send("Success");
-    //     });
-    // });
-    
+    })   
 });
 
 
@@ -105,20 +94,6 @@ app.post("/signin", function(req, res) {
             console.log("invalid");
         }
     })
-    // fs.readFile("users.json", "utf-8", function(err, data) {
-    //     const gotData = JSON.parse(data);
-    //     users=gotData.users; 
-    //     console.log(users[0])
-    //     const user = users.find(u => u.userName === userName && u.password === password);
-        
-    //     if (user) {
-    //         const token = jwt.sign({ userId: user.userId, userName: user.userName }, "123random");
-    //         res.send({ token: token });
-    //     } else {
-    //         res.send("invalid");
-    //         console.log("invalid");
-    //     }
-    // });
 });
 
 app.post("/create-blogs",function(req,res){
@@ -127,6 +102,26 @@ app.post("/create-blogs",function(req,res){
     const title=req.body.title;
     const content=req.body.content;
     const { userId, userName } = jwt.verify(token, "123random");
+    Blogs.findOne({
+        userName:userName
+    }).then(function(user){
+        if(user){
+            Blogs.create({
+                userId:user._id,
+                userName:user.userName,
+                title:title,
+                content:content
+            }).then(
+                function(response){
+                    console.log(response.data)
+                }
+            )
+        }
+    })
+
+
+
+
     fs.readFile("users.json", "utf-8", function(err, data) {
         if(err){
             console.log("error")
