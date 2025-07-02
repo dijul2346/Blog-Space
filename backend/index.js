@@ -24,7 +24,7 @@ const BlogSchema=({
     title:String,
     content:String,
 })
-const Blogs=mongoose.model('users',BlogSchema)
+const Blogs=mongoose.model('blogs',BlogSchema)
 
 
 let userid=1000
@@ -113,7 +113,7 @@ app.post("/create-blogs",function(req,res){
                 content:content
             }).then(
                 function(response){
-                    console.log(response.data)
+                    res.send(response.data)
                 }
             )
         }
@@ -122,33 +122,33 @@ app.post("/create-blogs",function(req,res){
 
 
 
-    fs.readFile("users.json", "utf-8", function(err, data) {
-        if(err){
-            console.log("error")
-        }
-        const gotData = JSON.parse(data); 
-        const user = gotData.users.find(u => u.userId === userId);
-        if (user) {
-        fs.readFile("blogs.json","utf-8",function(err,data){
-        const gotData=JSON.parse(data);
-        const blogs = gotData.blogs;
-        let maxBlogId = 0;
-        if (blogs.length > 0) {
-            maxBlogId = Math.max(...blogs.map(b => b.blogId || 0));
-        }
-        var blogId = maxBlogId + 1;
-        newBlog={userId,blogId,userName,title,content}
-        gotData.blogs.push(newBlog);
+    // fs.readFile("users.json", "utf-8", function(err, data) {
+    //     if(err){
+    //         console.log("error")
+    //     }
+    //     const gotData = JSON.parse(data); 
+    //     const user = gotData.users.find(u => u.userId === userId);
+    //     if (user) {
+    //     fs.readFile("blogs.json","utf-8",function(err,data){
+    //     const gotData=JSON.parse(data);
+    //     const blogs = gotData.blogs;
+    //     let maxBlogId = 0;
+    //     if (blogs.length > 0) {
+    //         maxBlogId = Math.max(...blogs.map(b => b.blogId || 0));
+    //     }
+    //     var blogId = maxBlogId + 1;
+    //     newBlog={userId,blogId,userName,title,content}
+    //     gotData.blogs.push(newBlog);
 
-        fs.writeFile("blogs.json", JSON.stringify(gotData), "utf-8",function(err,data){
-            iden={userId,blogId}
-            res.send(iden)
-        })
-        })
-        } else {
-            res.send("invalid");
-        }
-    });
+    //     fs.writeFile("blogs.json", JSON.stringify(gotData), "utf-8",function(err,data){
+    //         iden={userId,blogId}
+    //         res.send(iden)
+    //     })
+    //     })
+    //     } else {
+    //         res.send("invalid");
+    //     }
+    // });
     
 })
 
