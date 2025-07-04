@@ -82,4 +82,25 @@ app.get("/blogs",authMiddleware,function(req,res){
     })
 })
 
+app.get("/blogs/:un",authMiddleware,function(req,res){
+    const sun=req.params.un;
+        BlogModel.find({
+            userName:sun
+        })
+        .then(function(response){
+            console.log("data is ", response)
+            res.send(response)
+        })
+})
+
+app.delete("/blogs/:bid",authMiddleware,function(req,res){
+    const bid=req.params.bid;
+            BlogModel.deleteOne({
+                userName:userName,
+                _id:bid
+            }).then(function(response){
+                res.send("deleted")
+            })
+})
+
 app.listen(4000)
