@@ -8,6 +8,7 @@ app.use(cors());
 const mongoose=require('mongoose')
 
 const { UserModel, BlogModel } = require("./mongo.cjs");
+const authMiddleware = require("./modules.cjs")
 
 mongoose.connect("mongodb+srv://dijulM:DM%40ncr70@cluster0.fezmq8v.mongodb.net/Blog-app-db");
 console.log(mongoose.connection.readyState);
@@ -49,6 +50,29 @@ app.post("/signin",function(req,res){
         }
         else{
             res.send("invalid");
+        }
+    })
+})
+
+
+app.post("/blogs",authMiddleware,function(req,res){
+    const title=req.body.title;
+    const content=req.body.content;
+    const { userId, userName } = req.user;
+    UserModel.findOne({
+        userName:userName
+    }).then(function(user){
+        if(user){
+            BlogModel.create({
+                userId:user._id,
+                userName:user.userName,
+                title:title,
+                content:content
+            }).then(
+                function(response){
+                    res.send(response._id)
+                }
+            )
         }
     })
 })
