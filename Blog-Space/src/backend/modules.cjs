@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const {z}=require("zod")
+const {z}=require("zod");
+const { UserModel } = require("./mongo.cjs");
 
 
 const signupSchema = z.object({
@@ -27,7 +28,7 @@ function authMiddleware(req, res, next) {
         })
         .catch(() => res.status(500).send("Server error"));
     } catch (err) {
-        return res.status(401).send("Invalid token.");
+        return res.status
     }
 }
 

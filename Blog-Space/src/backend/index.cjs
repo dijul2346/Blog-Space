@@ -62,7 +62,7 @@ app.post("/signin",function(req,res){
 app.post("/blogs",authMiddleware,function(req,res){
     const title=req.body.title;
     const content=req.body.content;
-    const { userId, userName } = req.user;
+    const user= req.user;
     BlogModel.create({
         userId:user._id,
         userName:user.userName,
