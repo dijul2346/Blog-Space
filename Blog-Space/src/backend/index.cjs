@@ -74,4 +74,12 @@ app.post("/blogs",authMiddleware,function(req,res){
     })
 })
 
+app.get("/blogs",authMiddleware,function(req,res){
+            BlogModel.find({})
+            .then(function(response){
+                console.log("data is ", response)
+                res.send(response)
+    })
+})
+
 app.listen(4000)
