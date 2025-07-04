@@ -58,6 +58,16 @@ app.post("/signin",function(req,res){
     })
 })
 
+app.get("/blogs/:bid",function(req,res){
+    const bid=req.params.bid;
+    BlogModel.find({
+        _id:bid
+    })
+    .then(function(response){
+        console.log("data is ", response)
+        res.send(response)
+    })
+})
 
 app.post("/blogs",authMiddleware,function(req,res){
     const title=req.body.title;
@@ -95,12 +105,13 @@ app.get("/blogs/:un",authMiddleware,function(req,res){
 
 app.delete("/blogs/:bid",authMiddleware,function(req,res){
     const bid=req.params.bid;
-            BlogModel.deleteOne({
-                userName:userName,
-                _id:bid
-            }).then(function(response){
-                res.send("deleted")
-            })
+    const user= req.user;
+    BlogModel.deleteOne({
+        userName:user.userName,
+        _id:bid
+    }).then(function(response){
+    res.send("deleted")
+    })
 })
 
-app.listen(4000)
+app.listen(3000)

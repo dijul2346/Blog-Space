@@ -9,6 +9,11 @@ const signupSchema = z.object({
     password: z.string().min(4).max(16)
 });
 
+const signinSchema=z.object({
+    userName: z.string().min(3).max(25),
+    password: z.string().min(4).max(16)
+})
+
 function authMiddleware(req, res, next) {
     const token =req.headers.token;
     if (!token) {
@@ -34,6 +39,7 @@ function authMiddleware(req, res, next) {
 
 module.exports ={
     authMiddleware,
-    signupSchema
+    signupSchema,
+    signinSchema
 } 
 
