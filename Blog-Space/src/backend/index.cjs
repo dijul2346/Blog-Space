@@ -8,14 +8,18 @@ app.use(cors());
 const mongoose=require('mongoose')
 
 const { UserModel, BlogModel } = require("./mongo.cjs");
-const authMiddleware = require("./modules.cjs")
+const {authMiddleware, signupSchema} = require("./modules.cjs")
 
 mongoose.connect("mongodb+srv://dijulM:DM%40ncr70@cluster0.fezmq8v.mongodb.net/Blog-app-db");
 console.log(mongoose.connection.readyState);
 
 
 app.post("/signup", function(req, res) {
-    const { name, userName, password } = req.body;
+        const parseResult = signupSchema.safeParse(req.body);
+    if (!parseResult.success) {
+        return res.status(400).send("Invalid input");
+    }
+    const { name, userName, password } = parseResult.data;
     UserModel.findOne({ userName })
         .then(function(user) {
             if (user) {
@@ -59,21 +63,14 @@ app.post("/blogs",authMiddleware,function(req,res){
     const title=req.body.title;
     const content=req.body.content;
     const { userId, userName } = req.user;
-    UserModel.findOne({
-        userName:userName
-    }).then(function(user){
-        if(user){
-            BlogModel.create({
-                userId:user._id,
-                userName:user.userName,
-                title:title,
-                content:content
-            }).then(
-                function(response){
-                    res.send(response._id)
-                }
-            )
-        }
+    BlogModel.create({
+        userId:user._id,
+        userName:user.userName,
+        title:title,
+        content:content
+    }).then(
+        function(response){
+        res.send(response._id)
     })
 })
 

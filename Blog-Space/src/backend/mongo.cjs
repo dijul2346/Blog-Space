@@ -19,3 +19,4 @@ module.exports={
     UserModel:mongoose.model('users',UserSchema),
     BlogModel:mongoose.model('blogs',BlogSchema)
 }
+
