@@ -6,11 +6,12 @@ app.use(express.json())
 const cors = require('cors');
 app.use(cors());
 const mongoose=require('mongoose')
+require('dotenv').config();
 
 const { UserModel, BlogModel } = require("./mongo.cjs");
 const {authMiddleware, signupSchema} = require("./modules.cjs")
 
-mongoose.connect("mongodb+srv://dijulM:DM%40ncr70@cluster0.fezmq8v.mongodb.net/Blog-app-db");
+mongoose.connect(process.env.MONGODB_URI);
 console.log(mongoose.connection.readyState);
 
 
@@ -49,7 +50,7 @@ app.post("/signin",function(req,res){
     .then(function(user){
         if(user){
             const userId=user._id
-            const token=jwt.sign({userId,userName},"123random");
+            const token=jwt.sign({userId,userName},process.env.JWT_SECRET);
             res.send({token:token})
         }
         else{

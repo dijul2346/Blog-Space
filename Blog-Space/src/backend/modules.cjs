@@ -20,7 +20,7 @@ function authMiddleware(req, res, next) {
         return res.status(401).send("No Token");
     }
     try {
-        const {userId,userName} = jwt.verify(token, "123random");
+        const {userId,userName} = jwt.verify(token,process.env.JWT_SECRET);
         UserModel.findOne({ userName })
         .then(function(user){
             if(user){
