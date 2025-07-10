@@ -74,6 +74,7 @@ app.post("/blogs",authMiddleware,function(req,res){
     const title=req.body.title;
     const content=req.body.content;
     const user= req.user;
+    let i=0
     BlogModel.create({
         userId:user._id,
         userName:user.userName,
