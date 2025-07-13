@@ -66,3 +66,42 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.blog{
+        border-radius: 10px;
+        border:2px solid rgb(214, 99, 99);
+        background-color: rgb(52, 52, 52);
+        padding: 10px;
+        margin:1px;
+        min-width:100%;
+        overflow: hidden;
+        justify-content: flex-start;
+    }
+#container{
+        display: flex;
+        flex-wrap: wrap;
+        gap:16px;
+}
+
+.nav{
+  display: flex; justify-content:space-between; align-items: center;
+        background-color: #2e2c2c;padding-left:180px;padding-right:25px; 
+        font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; 
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);position: fixed; top: 0; left: 0; right: 0; z-index: 999;margin-bottom: 10%;
+}
+
+#c1{
+  padding-top: 80px;width:60%;justify-content: center;justify-self:center;
+}
+
+#title{
+  padding: 2px;height: 25px;margin-top:1px;width: 90vb;
+}
+
+#c2{
+  width:60%;justify-content: center;justify-self:center;
+}
+
+#content{
+  height: 20vh;overflow:scroll;width: 90vb;
+}
