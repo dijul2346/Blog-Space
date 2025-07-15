@@ -6,7 +6,7 @@ function CreateBlog(){
         let title = document.getElementById("title").value;
         let content = document.getElementById("content").value;
     axios.post(
-      "http://localhost:3000/create-blogs",
+      "http://localhost:3000/blogs",
       { title: title,
         content:content
        },
