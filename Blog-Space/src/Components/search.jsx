@@ -1,27 +1,23 @@
-import { useEffect, useState, useCallback } from "react";
-export function SearchBar({ blogs, allblogs, setBlogs }){
-    function search(){
-     console.log("Works")
-    let item=document.getElementById("search").value
-    item=item.toLowerCase()
-    const found = allblogs.filter(u =>
-    u.title.toLowerCase().includes(item) ||
-    u.userName.toLowerCase().includes(item)
+export function SearchBar({ blogs, allblogs, setBlogs }) {
+  function search() {
+    const input = document.getElementById("search").value.toLowerCase();
+    const found = allblogs.filter(blog =>
+      blog.title.toLowerCase().includes(input) ||
+      blog.userName.toLowerCase().includes(input)
     );
-    console.log(found)
-    setBlogs(found);
-    if(item==""){
-      setBlogs(allblogs)
-    }
+    setBlogs(input ? found : allblogs);
   }
-  function clearSearch(){
-    setBlogs(allblogs)
+
+  function clearSearch() {
+    document.getElementById("search").value = "";
+    setBlogs(allblogs);
   }
-  return(
-    <div style={{gap:"20px"}}>
-        <input type="text" placeholder="Search" id="search" style={{height:"30px",width:"350px",borderRadius:"10px",marginRight:"10px"}} />
-        <button onClick={search}>Search</button>
-        <button onClick={clearSearch}>Clear</button>
+
+  return (
+    <div className="search-bar">
+      <input type="text" id="search" placeholder="Search by title or user" />
+      <button onClick={search}>Search</button>
+      <button className="clear-btn" onClick={clearSearch}>Clear</button>
     </div>
-  )
+  );
 }
