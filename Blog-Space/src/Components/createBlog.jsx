@@ -1,5 +1,6 @@
 import { NavBar } from "./topBar"
 import axios from "axios";
+import "../css/createBlog.css";
 function CreateBlog(){
 
     function submit(){
